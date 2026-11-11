@@ -1,5 +1,9 @@
 import { expect, test } from '@playwright/test'
 
+test.beforeEach(async ({ page }) => {
+  await page.route(url => url.pathname.startsWith('/api/'), route => route.fulfill({ status: 503, body: '' }))
+})
+
 test('плитка: фильтр применяется кнопкой, пустой результат и сброс', async ({ page }) => {
   await page.goto('/observation_points')
   await expect(page.locator('.grid .card')).toHaveCount(6)
@@ -43,7 +47,7 @@ test('прямая лента, видео, координаты и описан�
   await page.getByText('Меньше ↑', { exact: true }).click()
   await expect(page.locator('details')).not.toHaveAttribute('open')
   await expect(page.getByRole('button', { name: 'Добавление' })).toBeDisabled()
-  await expect(page.getByRole('button', { name: 'Войти' })).toBeDisabled()
+  await expect(page.getByRole('link', { name: 'Войти', exact: true })).toHaveAttribute('href', '/login')
   await expect(page.getByRole('link', { name: 'Лента', exact: true })).toHaveAttribute('aria-current', 'page')
   await expect(page.getByRole('button', { name: /нравится/i })).toHaveCount(0)
 })

@@ -1,13 +1,15 @@
-import { useState } from 'react'
 import type { CSSProperties, FormEvent } from 'react'
 import { Button, Form } from 'react-bootstrap'
+import { useAppDispatch, useAppSelector } from '../store/store'
+import { setLatitudeInput } from '../store/observationPointsSlice'
 
 interface ObservationPointLatitudeFilterProps {
   onApply: (minLatitude: number) => void
 }
 
 export function ObservationPointLatitudeFilter({ onApply }: ObservationPointLatitudeFilterProps) {
-  const [minLatitude, setMinLatitude] = useState(-90)
+  const minLatitude = useAppSelector(state => state.observationPoints.latitudeInput)
+  const dispatch = useAppDispatch()
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -29,7 +31,7 @@ export function ObservationPointLatitudeFilter({ onApply }: ObservationPointLati
             max={90}
             step={1}
             value={minLatitude}
-            onChange={(event) => setMinLatitude(Number(event.target.value))}
+            onChange={(event) => dispatch(setLatitudeInput(Number(event.target.value)))}
           />
           <div className="filter__scale">
             <span>−90° ю. ш.</span>

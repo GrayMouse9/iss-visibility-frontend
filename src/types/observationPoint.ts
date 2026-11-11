@@ -7,4 +7,6 @@ export interface ObservationPoint {
   latitude: number | null
   longitude: number | null
   likes: number
+  is_mine?: number
+  liked?: number
 }
